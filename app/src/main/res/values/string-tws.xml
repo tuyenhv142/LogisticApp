@@ -1,64 +1,64 @@
 <resources>
-    <string name="app_name">qr_code_project</string>
-    <string name="default_notification_channel_id">qr_code_notifications</string>
+    <string name="app_name">二維碼項目</string>
+    <string name="default_notification_channel_id">二維碼通知</string>
 
     <!--    Package-->
-    <string name="pack_title">Packing Receipt Information</string>
-    <string name="quantity_product">Product Quantity</string>
-    <string name="list_product">List Product</string>
-    <string name="reset">Reset</string>
-    <string name="submit">Submit</string>
+    <string name="pack_title">包裝收據資訊</string>
+    <string name="quantity_product">產品數量</string>
+    <string name="list_product">產品列表</string>
+    <string name="reset">重置</string>
+    <string name="submit">提交</string>
 
     <!--    Swap-->
-    <string name="plan_list">Plan List</string>
-    <string name="warehouse">Warehouse: </string>
-    <string name="edit_warehouse">Warehouse</string>
-    <string name="edit_warehouse2">Warehouse 2</string>
-    <string name="plan_information">Plan Information</string>
-    <string name="confirm">Confirm</string>
-    <string name="location">Location Code:</string>
-    <string name="location_code">Scan location</string>
-    <string name="location_code2">Scan location2</string>
-    <string name="enter_location">Enter Location</string>
-    <string name="floor">Floor: </string>
-    <string name="edit_floor">Floor</string>
-    <string name="edit_floor2">Floor2</string>
-    <string name="area">Area: </string>
-    <string name="edit_area">Area</string>
-    <string name="edit_area2">Area 2</string>
-    <string name="product_name">Product Name: </string>
-    <string name="product_id">Product Code:</string>
-    <string name="quantity">Quantity: </string>
-    <string name="swap_to_location">Swap to location</string>
+    <string name="plan_list">計劃列表</string>
+    <string name="warehouse">倉庫：</string>
+    <string name="edit_warehouse">倉庫</string>
+    <string name="edit_warehouse2">倉庫 2</string>
+    <string name="plan_information">計劃資訊</string>
+    <string name="confirm">確認</string>
+    <string name="location">位置代碼：</string>
+    <string name="location_code">掃描位置</string>
+    <string name="location_code2">掃描位置 2</string>
+    <string name="enter_location">輸入位置</string>
+    <string name="floor">樓層：</string>
+    <string name="edit_floor">樓層</string>
+    <string name="edit_floor2">樓層 2</string>
+    <string name="area">區域：</string>
+    <string name="edit_area">區域</string>
+    <string name="edit_area2">區域 2</string>
+    <string name="product_name">產品名稱：</string>
+    <string name="product_id">產品代碼：</string>
+    <string name="quantity">數量：</string>
+    <string name="swap_to_location">交換到位置</string>
 
     <!--    product_detail_pack-->
-    <string name="product_detail">Product Detail</string>
-    <string name="enter_id">Enter ID</string>
-    <string name="enter_name">Enter Name</string>
-    <string name="quantity_pack">Quantity Pack</string>
-    <string name="enter_quantity">Enter Quantity</string>
-    <string name="actual_quantity">Actual Quantity</string>
+    <string name="product_detail">產品詳情</string>
+    <string name="enter_id">輸入 ID</string>
+    <string name="enter_name">輸入名稱</string>
+    <string name="quantity_pack">包裝數量</string>
+    <string name="enter_quantity">輸入數量</string>
+    <string name="actual_quantity">實際數量</string>
 
     <!--    Plan-->
-    <string name="list_plan">Name of the migration plan</string>
+    <string name="list_plan">遷移計劃名稱</string>
 
     <!--    Warehouse Info-->
-    <string name="warehouse_info">Take product from location</string>
-    <string name="warehouse_code">Receive Warehouse</string>
-    <string name="warehouse_title_code">Warehouse Code</string>
-    <string name="product_title_code">Product Barcode</string>
-    <string name="product_barcode">Scan Product barcode</string>
+    <string name="warehouse_info">從位置取出產品</string>
+    <string name="warehouse_code">接收倉庫</string>
+    <string name="warehouse_title_code">倉庫代碼</string>
+    <string name="product_title_code">產品條碼</string>
+    <string name="product_barcode">掃描產品條碼</string>
 
     <!--    Product Swap-->
-    <string name="product_swap">Product Swap</string>
-    <string name="quantity_swap">Quantity Swap</string>
-    <string name="location_swap">Location Swap</string>
-    <string name="swap_to">Please scan location swap</string>
-    <string name="in_bound">In Bound</string>
-    <string name="username">Username</string>
-    <string name="outbound">Outbound</string>
-    <string name="inbound">Inbound</string>
-    <string name="pack">Package</string>
-    <string name="swap">Swap product \n location</string>
+    <string name="product_swap">產品交換</string>
+    <string name="quantity_swap">交換數量</string>
+    <string name="location_swap">位置交換</string>
+    <string name="swap_to">請掃描交換位置</string>
+    <string name="in_bound">入庫</string>
+    <string name="username">用戶名</string>
+    <string name="outbound">出庫</string>
+    <string name="inbound">入庫</string>
+    <string name="pack">包裝</string>
+    <string name="swap">交換產品\n位置</string>
 
 </resources>
