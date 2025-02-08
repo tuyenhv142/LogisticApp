@@ -125,9 +125,14 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"/>
             </LinearLayout>
-            <TextView android:id="@+id/locationBarcodeStatus1Text" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:text="Please scan the barcode"
-                android:textSize="14sp" android:textColor="#FF0000" android:layout_marginBottom="16dp"  />
+            <TextView
+                android:id="@+id/locationBarcodeStatus1Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Please scan the barcode"
+                android:textSize="14sp"
+                android:textColor="#FF0000"
+                android:layout_marginBottom="16dp"  />
 
             <LinearLayout
                 android:layout_width="match_parent"

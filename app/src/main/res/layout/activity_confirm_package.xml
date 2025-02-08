@@ -171,6 +171,6 @@
             android:text="@string/confirm"
             android:textSize="24sp"
             android:background="@drawable/background_btn"
-            android:textColor="#000" />
+            android:textColor="@color/white" />
     </LinearLayout>
 </ScrollView>
