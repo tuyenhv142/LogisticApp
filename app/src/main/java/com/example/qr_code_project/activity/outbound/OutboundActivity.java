@@ -25,6 +25,7 @@ import com.example.qr_code_project.adapter.ExportAdapter;
 import com.example.qr_code_project.modal.ExportModal;
 import com.example.qr_code_project.network.ApiConstants;
 import com.example.qr_code_project.network.SSLHelper;
+import com.example.qr_code_project.service.TokenManager;
 import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONException;
@@ -46,6 +47,7 @@ public class OutboundActivity extends AppCompatActivity {
     private ArrayList<ExportModal> exportList;
     private ExportAdapter exportAdapter;
     private LoadingDialog loadingDialog;
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +125,9 @@ public class OutboundActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (tokenManager.isTokenExpired()) {
+                    tokenManager.clearTokenAndLogout();
+                }else {
                     headers.put("Authorization", "Bearer " + token);
                 }
                 headers.put("Content-Type", "application/json");
@@ -165,7 +169,6 @@ public class OutboundActivity extends AppCompatActivity {
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
         loadingDialog.dismiss();
     }
-
 
     @SuppressLint("NotifyDataSetChanged")
     private void content(JSONObject content) throws JSONException {
@@ -214,7 +217,7 @@ public class OutboundActivity extends AppCompatActivity {
         exportsRv.setLayoutManager(new LinearLayoutManager(this));
         loadingDialog = new LoadingDialog(this);
         qrcodeManager = new QRcodeManager(this);
-
+        tokenManager = new TokenManager(this);
     }
 
 }

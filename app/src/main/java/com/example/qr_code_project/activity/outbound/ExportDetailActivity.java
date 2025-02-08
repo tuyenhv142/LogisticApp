@@ -21,6 +21,7 @@ import com.example.qr_code_project.R;
 import com.example.qr_code_project.adapter.ProductAdapter;
 import com.example.qr_code_project.modal.ProductModal;
 import com.example.qr_code_project.network.ApiConstants;
+import com.example.qr_code_project.service.TokenManager;
 import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONArray;
@@ -39,6 +40,7 @@ public class ExportDetailActivity extends AppCompatActivity {
     private ArrayList<ProductModal> productList;
     private SharedPreferences sharedPreferences;
     private LoadingDialog loadingDialog;
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +54,17 @@ public class ExportDetailActivity extends AppCompatActivity {
 
         loadProductsForOrder(codeEp);
 
+        utilButton();
+
+    }
+
+    private void utilButton() {
         returnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
     }
 
     private void loadProductsForOrder(String codeEp) {
@@ -75,8 +81,10 @@ public class ExportDetailActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (!tokenManager.isTokenExpired()) {
                     headers.put("Authorization", "Bearer " + token);
+                }else {
+                    tokenManager.clearTokenAndLogout();
                 }
                 headers.put("Content-Type", "application/json");
                 return headers;
@@ -85,6 +93,7 @@ public class ExportDetailActivity extends AppCompatActivity {
 
         Volley.newRequestQueue(this).add(request);
     }
+
     private void responseData(String response) {
         try {
             JSONObject jsonObject = new JSONObject(response);
@@ -156,5 +165,6 @@ public class ExportDetailActivity extends AppCompatActivity {
         productExportRv.setLayoutManager(new LinearLayoutManager(this));
         loadingDialog = new LoadingDialog(this);
         productList = new ArrayList<>();
+        tokenManager = new TokenManager(this);
     }
 }

@@ -36,6 +36,7 @@ import com.example.qr_code_project.modal.ExportModal;
 import com.example.qr_code_project.modal.ProductModal;
 import com.example.qr_code_project.modal.SwapModal;
 import com.example.qr_code_project.network.ApiConstants;
+import com.example.qr_code_project.service.TokenManager;
 import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONArray;
@@ -55,6 +56,7 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
     private ArrayList<SwapModal> swapArrayList;
     private SwapLocationAdapter swapLocationAdapter;
     private LoadingDialog loadingDialog;
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,7 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         swapLocationsRv.setLayoutManager(new LinearLayoutManager(this));
         swapArrayList = new ArrayList<>();
+        tokenManager = new TokenManager(this);
     }
 
     private void loadSwapPlan(){
@@ -89,8 +92,10 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (!tokenManager.isTokenExpired()) {
                     headers.put("Authorization", "Bearer " + token);
+                }else {
+                    tokenManager.clearTokenAndLogout();
                 }
                 headers.put("Content-Type", "application/json");
                 return headers;
@@ -109,11 +114,12 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
                     populateContent(content);
                 }
             } else {
-                showError(jsonObject.optString("error", "Unknown error"));
+                Toast.makeText(this,jsonObject.optString("error",
+                        "Unknown error"),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            showError("Failed to parse response!");
+            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
@@ -157,10 +163,6 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
         }
     }
 
-    private void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
     private void handleError(Exception error) {
         String errorMsg = "An error occurred. Please try again.";
         if (error instanceof com.android.volley.TimeoutError) {
@@ -198,7 +200,6 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
                     jsonObject = new JSONObject(response);
 //                    if (jsonObject.getBoolean("content")) {
                     if (jsonObject.getBoolean("success")) {
-                        showError(jsonObject.optString("error", "Unknown error"));
                         Toast.makeText(this, "Confirmed successfully!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(this, DetailSwapLocationActivity.class);
                         intent.putExtra("swapId", swapId);
@@ -232,8 +233,10 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (!tokenManager.isTokenExpired()) {
                     headers.put("Authorization", "Bearer " + token);
+                }else {
+                    tokenManager.clearTokenAndLogout();
                 }
                 headers.put("Content-Type", "application/json");
                 return headers;

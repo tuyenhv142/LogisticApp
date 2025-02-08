@@ -45,6 +45,10 @@ public class ConfirmInboundActivity extends AppCompatActivity {
         SSLHelper.trustAllCertificates();
 
         // Get data from InboundActivity
+        getDataFromIntent();
+    }
+
+    private void getDataFromIntent() {
         ProductModal productModal = (ProductModal) getIntent().getSerializableExtra("product");
         if (productModal == null) {
             Toast.makeText(this, "Product data is missing!", Toast.LENGTH_SHORT).show();

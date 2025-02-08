@@ -5,19 +5,30 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
     tools:context=".activity.swap.UnSuccessSwapLocationActivity">
+
+    <TextView
+        android:id="@+id/includeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your swap location unsuccess"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/unSuccessSwapLocationsRv"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/unSuccessSwapLocationsRv"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
+        android:layout_width="600dp"
+        android:layout_height="450dp"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="35dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.6"
+        app:layout_constraintTop_toBottomOf="@id/includeTitle"
         tools:listitem="@layout/row_swap_location" />
 </androidx.constraintlayout.widget.ConstraintLayout>

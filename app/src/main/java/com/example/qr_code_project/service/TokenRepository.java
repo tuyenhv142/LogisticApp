@@ -20,6 +20,7 @@ import java.util.Map;
 public class TokenRepository {
 
     public static void sendTokenToServer(Context context, String token) {
+        TokenManager tokenManager = new TokenManager(context);
         RequestQueue queue = Volley.newRequestQueue(context);
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences("AccountToken", Context.MODE_PRIVATE);
@@ -58,8 +59,10 @@ public class TokenRepository {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (!tokenManager.isTokenExpired()) {
                     headers.put("Authorization", "Bearer " + token);
+                }else {
+                    tokenManager.clearTokenAndLogout();
                 }
                 headers.put("Content-Type", "application/json");
                 return headers;

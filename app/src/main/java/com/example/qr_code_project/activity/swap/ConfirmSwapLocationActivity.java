@@ -18,6 +18,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -28,6 +29,7 @@ import com.example.qr_code_project.activity.MainActivity;
 import com.example.qr_code_project.activity.packaged.PackageActivity;
 import com.example.qr_code_project.network.ApiConstants;
 import com.example.qr_code_project.network.ApiService;
+import com.example.qr_code_project.service.TokenManager;
 import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONArray;
@@ -55,24 +57,25 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     private String scannedLocation2= "";
     private ApiService apiService;
     private LoadingDialog loadingDialog;
+    private TokenManager tokenManager;
 
     private int statusId;
+    private int swapId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_confirm_swap_location);
-        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
 
-        product1Location = sharedPreferences.getString("product1_location", "N/A");
-        product2Location = sharedPreferences.getString("product2_location", "N/A");
-        int swapId = sharedPreferences.getInt("swap_location_id", 0);
 
         util();
+
         setupQRManager();
 
         fetchProductLocation(product1Location,true);
+
         fetchProductLocation(product2Location,false);
+
         fetchPlanStatus(swapId);
 
         confirmSwapBtn.setOnClickListener(v -> onConfirmSwap(swapId));
@@ -153,6 +156,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         locationNewBarcodeStatus2.setText(message);
         locationNewBarcodeStatus2.setTextColor(isValid ? Color.GREEN : Color.RED);
     }
+
     @SuppressLint("SetTextI18n")
     private void util(){
         nameLocationOld1Tv = findViewById(R.id.nameLocationOld1Tv);
@@ -171,6 +175,11 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         codeLocation1 = findViewById(R.id.codeLocation1);
         confirmSwapBtn = findViewById(R.id.confirmSwapBtn);
 
+        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
+
+        product1Location = sharedPreferences.getString("product1_location", "N/A");
+        product2Location = sharedPreferences.getString("product2_location", "N/A");
+        swapId = sharedPreferences.getInt("swap_location_id", 0);
         nameLocationOld1Tv.setText("Location code: "+product1Location);
         nameLocationOld2Tv.setText("Location code: "+product2Location);
         nameLocationNew1Tv.setText("Location code new: ");
@@ -181,7 +190,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         confirmSwapBtn.setEnabled(false);
         apiService = new ApiService(this);
         loadingDialog = new LoadingDialog(this);
-
+        tokenManager = new TokenManager(this);
     }
 
     private void fetchProductLocation(String code, boolean isOldLocation) {
@@ -197,13 +206,21 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (!tokenManager.isTokenExpired()) {
                     headers.put("Authorization", "Bearer " + token);
+                }else{
+                    tokenManager.clearTokenAndLogout();
                 }
                 headers.put("Content-Type", "application/json");
                 return headers;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                30000, // timeout (30 second)
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
         requestQueue.add(request);
     }
 
@@ -238,9 +255,15 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     }
 
     private void handleError(Exception error) {
-        Log.e("SwapLocation", "API Error", error);
+        String errorMsg = "An error occurred. Please try again.";
+        if (error instanceof com.android.volley.TimeoutError) {
+            errorMsg = "Request timed out. Please check your connection.";
+        } else if (error instanceof com.android.volley.NoConnectionError) {
+            errorMsg = "No internet connection!";
+        }
         loadingDialog.dismiss();
-        Toast.makeText(this, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
+        Log.e("API Error", error.getMessage(), error);
+        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
     }
 
     private void fetchPlanStatus(int code) {
@@ -254,8 +277,10 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (!tokenManager.isTokenExpired()) {
                     headers.put("Authorization", "Bearer " + token);
+                }else {
+                    tokenManager.clearTokenAndLogout();
                 }
                 headers.put("Content-Type", "application/json");
                 return headers;
@@ -279,6 +304,5 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
             Toast.makeText(this, "Failed to parse response!", Toast.LENGTH_SHORT).show();
         }
     }
-
 
 }

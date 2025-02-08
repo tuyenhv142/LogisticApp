@@ -17,7 +17,6 @@
         android:textStyle="bold"
         android:padding="10dp"
         android:layout_marginTop="15dp"
-        android:background="@drawable/background_green1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -138,9 +137,14 @@
             android:layout_height="48dp"
             android:padding="10dp"
             />
-        <TextView android:id="@+id/locationNewBarcodeStatus1" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="Please scan the barcode"
-            android:textSize="16sp" android:textColor="#FF0000" android:layout_marginBottom="16dp"  />
+        <TextView
+            android:id="@+id/locationNewBarcodeStatus1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please scan the barcode"
+            android:textSize="16sp"
+            android:textColor="#FF0000"
+            android:layout_marginBottom="16dp"  />
         <TextView
             android:id="@+id/nameLocationNew2Tv"
             android:textStyle="bold"
@@ -157,9 +161,14 @@
             android:layout_width="match_parent"
             android:layout_height="48dp" />
 
-        <TextView android:id="@+id/locationNewBarcodeStatus2" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="Please scan the barcode"
-            android:textSize="16sp" android:textColor="#FF0000" android:layout_marginBottom="16dp"  />
+        <TextView
+            android:id="@+id/locationNewBarcodeStatus2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please scan the barcode"
+            android:textSize="16sp"
+            android:textColor="#FF0000"
+            android:layout_marginBottom="16dp"  />
     </LinearLayout>
 
 
@@ -168,11 +177,12 @@
         android:id="@+id/confirmSwapBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/background_btn"
         android:text="Confirm"
         android:textSize="18sp"
-        android:background="@drawable/background_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

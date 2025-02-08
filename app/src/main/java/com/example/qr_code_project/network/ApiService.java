@@ -11,6 +11,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.qr_code_project.service.TokenManager;
 import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONException;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 public class ApiService {
     private final Context context;
+//    private TokenManager tokenManager
     private final RequestQueue requestQueue;
     private final SharedPreferences sharedPreferences;
     private static final String TAG = "ApiService";

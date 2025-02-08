@@ -23,6 +23,7 @@ import com.example.qr_code_project.R;
 import com.example.qr_code_project.adapter.SwapLocationAdapter;
 import com.example.qr_code_project.modal.SwapModal;
 import com.example.qr_code_project.network.ApiConstants;
+import com.example.qr_code_project.service.TokenManager;
 import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONArray;
@@ -42,6 +43,7 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
     private ArrayList<SwapModal> swapArrayList;
     private SwapLocationAdapter swapLocationAdapter;
     private RecyclerView unSuccessSwapLocationsRv;
+    private TokenManager tokenManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,7 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
     }
 
     private void util(){
+        tokenManager = new TokenManager(this);
         loadingDialog = new LoadingDialog(this);
         sharedPreferences = getSharedPreferences("AccountToken",MODE_PRIVATE);
         unSuccessSwapLocationsRv = findViewById(R.id.unSuccessSwapLocationsRv);
@@ -74,8 +77,10 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (!tokenManager.isTokenExpired()) {
                     headers.put("Authorization", "Bearer " + token);
+                }else {
+                    tokenManager.clearTokenAndLogout();
                 }
                 headers.put("Content-Type", "application/json");
                 return headers;
@@ -94,11 +99,12 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
                     populateContent(content);
                 }
             } else {
-                showError(jsonObject.optString("error", "Unknown error"));
+                Toast.makeText(this,jsonObject.optString("error"
+                        , "Unknown error"),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            showError("Failed to parse response!");
+            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
@@ -137,9 +143,6 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
         }
     }
 
-    private void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
 
     private void handleError(Exception error) {
         String errorMsg = "An error occurred. Please try again.";

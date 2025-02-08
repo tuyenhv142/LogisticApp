@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -29,6 +30,7 @@ import com.example.qr_code_project.activity.inbound.InboundActivity;
 import com.example.qr_code_project.adapter.ProductAdapter;
 import com.example.qr_code_project.modal.ProductModal;
 import com.example.qr_code_project.network.ApiConstants;
+import com.example.qr_code_project.service.TokenManager;
 import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONArray;
@@ -57,25 +59,37 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
     private QRcodeManager qrCodeManager;
     private boolean isConfirmed = false;
     private LoadingDialog loadingDialog;
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_detail_swap_location);
-        util();
-        int swapId = getIntent().getIntExtra("swapId", 0);
 
-        if (swapId == 0) {
-            Toast.makeText(this, "Error swapId is empty!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        util();
+
+        Integer swapId = getSwapIdFromIntent();
+        if (swapId == null) return;
+
         loadSwapLocation(swapId);
+
         setupQRManager();
 
         continueConfirmProductBtn.setOnClickListener(v -> onConfirmSwap(swapId));
 
     }
+
+    private @Nullable Integer getSwapIdFromIntent() {
+        int swapId = getIntent().getIntExtra("swapId", 0);
+
+        if (swapId == 0) {
+            Toast.makeText(this, "Error swapId is empty!", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        return swapId;
+    }
+
     private void onConfirmSwap(int swapId) {
         if (scannedProductLocation1.isEmpty() || scannedProductLocation2.isEmpty()) {
             Toast.makeText(this, "Please scan both product barcodes before confirming!"
@@ -111,8 +125,10 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (!tokenManager.isTokenExpired()) {
                     headers.put("Authorization", "Bearer " + token);
+                }else {
+                    tokenManager.clearTokenAndLogout();
                 }
                 headers.put("Content-Type", "application/json");
                 return headers;
@@ -171,7 +187,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         loadingDialog = new LoadingDialog(this);
-
+        tokenManager = new TokenManager(this);
         continueConfirmProductBtn.setEnabled(false);
     }
 
@@ -237,21 +253,25 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
             }
         }
     }
+
     private void updateLocation1ScanStatus(boolean isValid, String message) {
         locationBarcodeStatus1Text.setVisibility(View.VISIBLE);
         locationBarcodeStatus1Text.setText(message);
         locationBarcodeStatus1Text.setTextColor(isValid ? Color.GREEN : Color.RED);
     }
+
     private void updateProductLocation1ScanStatus(boolean isValid, String message) {
         productBarcodeStatus1Text.setVisibility(View.VISIBLE);
         productBarcodeStatus1Text.setText(message);
         productBarcodeStatus1Text.setTextColor(isValid ? Color.GREEN : Color.RED);
     }
+
     private void updateLocation2ScanStatus(boolean isValid, String message) {
         locationBarcodeStatus2Text.setVisibility(View.VISIBLE);
         locationBarcodeStatus2Text.setText(message);
         locationBarcodeStatus2Text.setTextColor(isValid ? Color.GREEN : Color.RED);
     }
+
     private void updateProductLocation2ScanStatus(boolean isValid, String message) {
         productBarcodeStatus2Text.setVisibility(View.VISIBLE);
         productBarcodeStatus2Text.setText(message);
@@ -270,8 +290,10 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (!tokenManager.isTokenExpired()) {
                     headers.put("Authorization", "Bearer " + token);
+                }else {
+                    tokenManager.clearTokenAndLogout();
                 }
                 headers.put("Content-Type", "application/json");
                 return headers;
@@ -319,9 +341,15 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
 
     //Show error process Api
     private void handleError(Exception error) {
-        Log.e("SwapLocation", "API Error", error);
+        String errorMsg = "An error occurred. Please try again.";
+        if (error instanceof com.android.volley.TimeoutError) {
+            errorMsg = "Request timed out. Please check your connection.";
+        } else if (error instanceof com.android.volley.NoConnectionError) {
+            errorMsg = "No internet connection!";
+        }
         loadingDialog.dismiss();
-        Toast.makeText(this, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
+        Log.e("API Error", error.getMessage(), error);
+        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
     }
 
 }

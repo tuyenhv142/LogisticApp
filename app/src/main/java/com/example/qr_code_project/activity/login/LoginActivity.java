@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -37,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEt;
     private Button loginBtn;
     private LoadingDialog loadingDialog;
+    private TextView forgetPasswordTv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +54,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void utilBtn() {
+        forgetPasswordTv.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ForgetPasswordActivity.class);
+            startActivity(intent);
+        });
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         usernameEt = findViewById(R.id.usernameEt);
         passwordEt = findViewById(R.id.passwordEt);
         loginBtn = findViewById(R.id.loginBtn);
+        forgetPasswordTv = findViewById(R.id.forgetPasswordTv);
 
         loadingDialog = new LoadingDialog(this);
     }

@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">qr_code_project</string>
+    <string name="default_notification_channel_id">qr_code_notifications</string>
+
+    <!--    Package-->
+    <string name="pack_title">Packing Receipt Information</string>
+    <string name="quantity_product">Product Quantity</string>
+    <string name="list_product">List Product</string>
+    <string name="reset">Reset</string>
+    <string name="submit">Submit</string>
+
+    <!--    Swap-->
+    <string name="plan_list">Plan List</string>
+    <string name="warehouse">Warehouse: </string>
+    <string name="edit_warehouse">Warehouse</string>
+    <string name="edit_warehouse2">Warehouse 2</string>
+    <string name="plan_information">Plan Information</string>
+    <string name="confirm">Confirm</string>
+    <string name="location">Location Code:</string>
+    <string name="location_code">Scan location</string>
+    <string name="location_code2">Scan location2</string>
+    <string name="enter_location">Enter Location</string>
+    <string name="floor">Floor: </string>
+    <string name="edit_floor">Floor</string>
+    <string name="edit_floor2">Floor2</string>
+    <string name="area">Area: </string>
+    <string name="edit_area">Area</string>
+    <string name="edit_area2">Area 2</string>
+    <string name="product_name">Product Name: </string>
+    <string name="product_id">Product Code:</string>
+    <string name="quantity">Quantity: </string>
+    <string name="swap_to_location">Swap to location</string>
+
+    <!--    product_detail_pack-->
+    <string name="product_detail">Product Detail</string>
+    <string name="enter_id">Enter ID</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="quantity_pack">Quantity Pack</string>
+    <string name="enter_quantity">Enter Quantity</string>
+    <string name="actual_quantity">Actual Quantity</string>
+
+    <!--    Plan-->
+    <string name="list_plan">Name of the migration plan</string>
+
+    <!--    Warehouse Info-->
+    <string name="warehouse_info">Take product from location</string>
+    <string name="warehouse_code">Receive Warehouse</string>
+    <string name="warehouse_title_code">Warehouse Code</string>
+    <string name="product_title_code">Product Barcode</string>
+    <string name="product_barcode">Scan Product barcode</string>
+
+    <!--    Product Swap-->
+    <string name="product_swap">Product Swap</string>
+    <string name="quantity_swap">Quantity Swap</string>
+    <string name="location_swap">Location Swap</string>
+    <string name="swap_to">Please scan location swap</string>
+    <string name="in_bound">In Bound</string>
+    <string name="username">Username</string>
+    <string name="outbound">Outbound</string>
+    <string name="inbound">Inbound</string>
+    <string name="pack">Package</string>
+    <string name="swap">Swap product \n location</string>
+
+</resources>

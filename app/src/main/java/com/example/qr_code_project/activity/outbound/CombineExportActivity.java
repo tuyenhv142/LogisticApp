@@ -27,6 +27,7 @@ import com.example.qr_code_project.adapter.ProductAdapter;
 import com.example.qr_code_project.modal.ExportModal;
 import com.example.qr_code_project.modal.ProductModal;
 import com.example.qr_code_project.network.ApiConstants;
+import com.example.qr_code_project.service.TokenManager;
 import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONArray;
@@ -53,6 +54,7 @@ public class CombineExportActivity extends AppCompatActivity {
     //check all request update confirm
     private int pendingRequests = 0;
     private int successfulRequests = 0;
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +64,13 @@ public class CombineExportActivity extends AppCompatActivity {
 
         util();
 
-        productList = new ArrayList<>();
-        deliveryList = new ArrayList<>();
-
         // Take a list export from Intent
-        ArrayList<ExportModal> exportList = getIntent().getParcelableArrayListExtra("exportList");
+        getDataFromIntent();
 
+    }
+
+    private void getDataFromIntent() {
+        ArrayList<ExportModal> exportList = getIntent().getParcelableArrayListExtra("exportList");
 
         if (exportList != null && !exportList.isEmpty()) {
             deliveryList.addAll(exportList);
@@ -84,57 +87,63 @@ public class CombineExportActivity extends AppCompatActivity {
             finish();
         }
 
-        submitOutboundBtn.setOnClickListener(v -> {
-            // Check all of deliveries
-            for (ExportModal export : deliveryList) {
-                // Create arraylist for save products in delivery
-                ArrayList<Map<String, Object>> productListForDelivery = new ArrayList<>();
-                ArrayList<ProductModal> productsForThisDelivery = deliveryProductsMap.get(export.getId());
-
-                // Check all of products
-                if (productsForThisDelivery != null) {
-                    for (ProductModal product : productsForThisDelivery) {
-                        // Get location and area from realQuantitiesMap
-                        Map<Integer, Object> realQuantityInfo =
-                                (Map<Integer, Object>) productMap.get(product.getId());
-
-                        if (realQuantityInfo != null) {
-                            Object location = realQuantityInfo.get("location");
-                            Object area = realQuantityInfo.get("areaId");
-
-                            if (location != null && area != null) {
-                                Map<String, Object> productData = new HashMap<>();
-                                productData.put("productDelivenote_id", 0);
-                                productData.put("id_product", product.getId());
-                                productData.put("quantity", product.getQuantity());
-                                productData.put("location", location);
-                                productData.put("area", area);
-
-                                productListForDelivery.add(productData);
-                                Log.d("CombineExportActivity",
-                                        "Added product to request: " + productData);
-                            }
-                        }
-                    }
-                } else {
-                    Log.e("CombineExportActivity",
-                            "No products found for delivery " + export.getId());
-                }
-
-                // Create object JSON for send API
-                Map<String, Object> requestData = new HashMap<>();
-                requestData.put("code", export.getCodeEp());
-                requestData.put("id", export.getId());
-                requestData.put("products", productListForDelivery);
-
-                // Send request API for update data
-                sendUpdateRequest(requestData);
-            }
-        });
-
+        utilButton();
     }
 
-    //
+    private void utilButton() {
+        submitOutboundBtn.setOnClickListener(v -> {
+            // Check all of deliveries
+            prepareSubmit();
+        });
+    }
+
+    private void prepareSubmit() {
+        for (ExportModal export : deliveryList) {
+            // Create arraylist for save products in delivery
+            ArrayList<Map<String, Object>> productListForDelivery = new ArrayList<>();
+            ArrayList<ProductModal> productsForThisDelivery = deliveryProductsMap.get(export.getId());
+
+            // Check all of products
+            if (productsForThisDelivery != null) {
+                for (ProductModal product : productsForThisDelivery) {
+                    // Get location and area from realQuantitiesMap
+                    Map<Integer, Object> realQuantityInfo =
+                            (Map<Integer, Object>) productMap.get(product.getId());
+
+                    if (realQuantityInfo != null) {
+                        Object location = realQuantityInfo.get("location");
+                        Object area = realQuantityInfo.get("areaId");
+
+                        if (location != null && area != null) {
+                            Map<String, Object> productData = new HashMap<>();
+                            productData.put("productDelivenote_id", 0);
+                            productData.put("id_product", product.getId());
+                            productData.put("quantity", product.getQuantity());
+                            productData.put("location", location);
+                            productData.put("area", area);
+
+                            productListForDelivery.add(productData);
+                            Log.d("CombineExportActivity",
+                                    "Added product to request: " + productData);
+                        }
+                    }
+                }
+            } else {
+                Log.e("CombineExportActivity",
+                        "No products found for delivery " + export.getId());
+            }
+
+            // Create object JSON for send API
+            Map<String, Object> requestData = new HashMap<>();
+            requestData.put("code", export.getCodeEp());
+            requestData.put("id", export.getId());
+            requestData.put("products", productListForDelivery);
+
+            // Send request API for update data
+            sendUpdateRequest(requestData);
+        }
+    }
+
     private void sendUpdateRequest(Map<String, Object> requestData) {
         String url = ApiConstants.DELIVERY_UPDATE;
         JSONObject jsonObject = new JSONObject(requestData);
@@ -166,8 +175,10 @@ public class CombineExportActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (!tokenManager.isTokenExpired()) {
                     headers.put("Authorization", "Bearer " + token);
+                }else {
+                    tokenManager.clearTokenAndLogout();
                 }
                 headers.put("Content-Type", "application/json");
                 return headers;
@@ -248,8 +259,10 @@ public class CombineExportActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (!tokenManager.isTokenExpired()) {
                     headers.put("Authorization", "Bearer " + token);
+                }else {
+                    tokenManager.clearTokenAndLogout();
                 }
                 headers.put("Content-Type", "application/json");
                 return headers;
@@ -360,5 +373,8 @@ public class CombineExportActivity extends AppCompatActivity {
         combinedExportsRv.setLayoutManager(new LinearLayoutManager(this));
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         loadingDialog = new LoadingDialog(this);
+        productList = new ArrayList<>();
+        deliveryList = new ArrayList<>();
+        tokenManager = new TokenManager(this);
     }
 }

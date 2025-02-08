@@ -9,9 +9,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="10dp"
-        android:background="@drawable/background_green1"
         android:text="Take product from location"
-        android:textSize="22sp"
+        android:textSize="28sp"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -25,6 +24,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -39,15 +40,14 @@
                     android:layout_marginTop="15sp"
                     android:layout_weight="1"
                     android:text="@string/warehouse"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
                 <EditText
                     android:id="@+id/warehouseOldEd"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/edit_warehouse"
-                    android:padding="5dp"
                     android:textSize="20sp"/>
             </LinearLayout>
 
@@ -63,15 +63,14 @@
                     android:layout_marginTop="15dp"
                     android:layout_weight="1"
                     android:text="@string/floor"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"/>
                 <EditText
                     android:id="@+id/floorOldEd"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/edit_floor"
-                    android:padding="10dp"
                     android:focusable="false"
                     android:focusableInTouchMode="false"/>
             </LinearLayout>
@@ -88,15 +87,14 @@
                     android:layout_marginTop="16dp"
                     android:layout_weight="1"
                     android:text="@string/area"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"/>
                 <EditText
                     android:id="@+id/areaOldEt"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/edit_area"
-                    android:padding="10dp"
                     android:focusable="false"
                     android:focusableInTouchMode="false"/>
             </LinearLayout>
@@ -113,26 +111,35 @@
                     android:layout_marginTop="16dp"
                     android:layout_weight="1"
                     android:text="@string/location"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"/>
-                <EditText
-                    android:id="@+id/locationOld1"
+
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="@string/location_code"
-                    android:padding="10dp"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"/>
+                    android:orientation="vertical">
+                    <EditText
+                        android:id="@+id/locationOld1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/location_code"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"/>
+
+                    <TextView
+                        android:id="@+id/locationBarcodeStatus1Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="Please scan the barcode"
+                        android:textColor="#FF0000"
+                        android:textSize="14sp" />
+                </LinearLayout>
             </LinearLayout>
-            <TextView
-                android:id="@+id/locationBarcodeStatus1Text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Please scan the barcode"
-                android:textSize="14sp"
-                android:textColor="#FF0000"
-                android:layout_marginBottom="16dp"  />
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -146,15 +153,14 @@
                     android:layout_marginTop="10dp"
                     android:layout_weight="1"
                     android:text="@string/product_name"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"/>
                 <EditText
                     android:id="@+id/productName1"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/enter_name"
-                    android:padding="10dp"
                     android:focusable="false"
                     android:focusableInTouchMode="false"/>
             </LinearLayout>
@@ -171,15 +177,14 @@
                     android:layout_marginTop="16dp"
                     android:layout_weight="1"
                     android:text="@string/quantity_product"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"/>
                 <EditText
                     android:id="@+id/productQuantity1"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/enter_quantity"
-                    android:padding="10dp"
                     android:focusable="false"
                     android:focusableInTouchMode="false"/>
             </LinearLayout>
@@ -196,22 +201,33 @@
                     android:layout_marginTop="16dp"
                     android:layout_weight="1"
                     android:text="@string/product_id"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
-                <EditText
-                    android:id="@+id/productCode1"
+
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:hint="@string/product_barcode"
-                    android:padding="10dp"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+                    <EditText
+                        android:id="@+id/productCode1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:hint="@string/product_barcode"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"/>
+                    <TextView
+                        android:id="@+id/productBarcodeStatus1Text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Please scan the product barcode"
+                        android:textSize="14sp"
+                        android:textColor="#FF0000"
+                        android:layout_marginBottom="16dp" />
+                </LinearLayout>
             </LinearLayout>
-            <TextView
-                android:id="@+id/productBarcodeStatus1Text" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:text="Please scan the product barcode"
-                android:textSize="14sp" android:textColor="#FF0000" android:layout_marginBottom="16dp" />
+
         </LinearLayout>
 
         <!-- Right Side -->
@@ -219,6 +235,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -233,15 +251,14 @@
                     android:layout_marginTop="15sp"
                     android:layout_weight="1"
                     android:text="@string/warehouse"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
                 <EditText
                     android:id="@+id/warehouseNew2"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/edit_warehouse2"
-                    android:padding="10dp"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -257,15 +274,14 @@
                     android:layout_marginTop="16dp"
                     android:layout_weight="1"
                     android:text="@string/floor"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"/>
                 <EditText
                     android:id="@+id/floorNew2"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/edit_floor2"
-                    android:padding="10dp"
                     android:focusable="false"
                     android:focusableInTouchMode="false"/>
             </LinearLayout>
@@ -283,16 +299,15 @@
                     android:layout_marginTop="16dp"
                     android:layout_weight="1"
                     android:text="@string/area"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"/>
 
                 <EditText
                     android:id="@+id/areaNew2"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/edit_area2"
-                    android:padding="10dp"
                     android:focusable="false"
                     android:focusableInTouchMode="false" />
             </LinearLayout>
@@ -310,21 +325,35 @@
                     android:layout_marginTop="16dp"
                     android:layout_weight="1"
                     android:text="@string/location"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
-                <EditText
-                    android:id="@+id/locationNewCode2"
+
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="@string/location_code"
-                    android:padding="10dp" android:focusable="false"
-                    android:focusableInTouchMode="false" />
+                    android:orientation="vertical">
+                    <EditText
+                        android:id="@+id/locationNewCode2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:hint="@string/location_code"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false" />
+                    <TextView
+                        android:id="@+id/locationBarcodeStatus2Text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Please scan the barcode"
+                        android:textSize="14sp"
+                        android:textColor="#FF0000"
+                        android:layout_marginBottom="16dp" />
+                </LinearLayout>
+
             </LinearLayout>
 
-            <TextView android:id="@+id/locationBarcodeStatus2Text" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:text="Please scan the barcode"
-                android:textSize="14sp" android:textColor="#FF0000" android:layout_marginBottom="16dp" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -339,7 +368,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_weight="1"
                     android:text="@string/product_name"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <EditText
@@ -348,7 +377,6 @@
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:hint="@string/enter_name"
-                    android:padding="10dp"
                     android:focusable="false"
                     android:focusableInTouchMode="false" />
             </LinearLayout>
@@ -366,7 +394,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_weight="1"
                     android:text="@string/quantity_product"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
                 <EditText
                     android:id="@+id/productQuantity2"
@@ -374,7 +402,6 @@
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:hint="@string/enter_quantity"
-                    android:padding="10dp"
                     android:focusable="false"
                     android:focusableInTouchMode="false" />
             </LinearLayout>
@@ -392,21 +419,32 @@
                     android:layout_marginTop="15dp"
                     android:layout_weight="1"
                     android:text="@string/product_id"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
-                <EditText
-                    android:id="@+id/productCode2"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:hint="@string/product_barcode"
-                    android:padding="10dp"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                    <EditText
+                        android:id="@+id/productCode2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:hint="@string/product_barcode"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false" />
+                    <TextView
+                        android:id="@+id/productBarcodeStatus2Text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Please scan the product barcode"
+                        android:textSize="14sp"
+                        android:textColor="#FF0000"
+                        android:layout_marginBottom="16dp" />
             </LinearLayout>
-            <TextView android:id="@+id/productBarcodeStatus2Text" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:text="Please scan the product barcode"
-                android:textSize="14sp" android:textColor="#FF0000" android:layout_marginBottom="16dp" />
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 

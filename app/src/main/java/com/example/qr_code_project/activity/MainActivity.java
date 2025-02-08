@@ -25,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.auth0.android.jwt.JWT;
 import com.example.qr_code_project.R;
 import com.example.qr_code_project.activity.inbound.InboundActivity;
 import com.example.qr_code_project.activity.login.LoginActivity;
@@ -36,6 +37,7 @@ import com.example.qr_code_project.adapter.SwapLocationAdapter;
 import com.example.qr_code_project.modal.SwapModal;
 import com.example.qr_code_project.network.ApiConstants;
 import com.example.qr_code_project.network.SSLHelper;
+import com.example.qr_code_project.service.TokenManager;
 import com.example.qr_code_project.service.TokenRepository;
 import com.example.qr_code_project.ui.LoadingDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,6 +50,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             ,packageBtn,swapProductLocationBtn;
     private RequestQueue requestQueue;
     private LoadingDialog loadingDialog;
+    private TokenManager tokenManager;
 
     private final ActivityResultLauncher<String> resultLauncher
             = registerForActivityResult(
@@ -142,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
         requestQueue = Volley.newRequestQueue(this);
         loadingDialog = new LoadingDialog(this);
+        tokenManager = new TokenManager(this);
         sharedPreferences = getSharedPreferences("AccountToken"
                 , MODE_PRIVATE);
     }
@@ -205,7 +210,9 @@ public class MainActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (tokenManager.isTokenExpired()) {
+                    tokenManager.clearTokenAndLogout();
+                } else {
                     headers.put("Authorization", "Bearer " + token);
                 }
                 headers.put("Content-Type", "application/json");
@@ -225,11 +232,12 @@ public class MainActivity extends AppCompatActivity {
                     contentAccount(content);
                 }
             } else {
-                showError(jsonObject.optString("error", "Unknown error"));
+                Toast.makeText(this, jsonObject.optString("error"
+                        , "Unknown error"),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            showError("Failed to parse response!");
+            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
         }finally {
             if (loadingDialog != null && !isFinishing() && !isDestroyed()) {
                 loadingDialog.dismiss();
@@ -268,10 +276,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
     private void handleError(Exception error) {
         String errorMsg = "An error occurred. Please try again.";
         if (error instanceof com.android.volley.TimeoutError) {
@@ -296,7 +300,9 @@ public class MainActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (tokenManager.isTokenExpired()) {
+                    tokenManager.clearTokenAndLogout();
+                }else {
                     headers.put("Authorization", "Bearer " + token);
                 }
                 headers.put("Content-Type", "application/json");
@@ -316,11 +322,12 @@ public class MainActivity extends AppCompatActivity {
                     contentUnSuccess(content);
                 }
             } else {
-                showError(jsonObject.optString("error", "Unknown error"));
+                Toast.makeText(this,jsonObject.optString("error"
+                        , "Unknown error"),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            showError("Failed to parse response!");
+            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
